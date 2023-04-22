@@ -12,7 +12,7 @@ public interface AdminService {
 
 	public Admin updatePassword(Integer adminId, String password);
 
-	public void deleteAdmin(int adminId);
+	public void deleteAdmin(int adminId) throws Exception;
 
 	public List<Driver> getListOfDrivers();
 	
