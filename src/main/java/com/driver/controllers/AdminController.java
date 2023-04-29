@@ -19,11 +19,11 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 	@Autowired
-	AdminService adminService;
+	AdminServiceImpl adminService;
 	@PostMapping("/register")
-	public ResponseEntity<Void> registerAdmin(@RequestBody Admin admin){
-		adminService.adminRegister(admin);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<Admin> registerAdmin(@RequestBody Admin admin){
+		Admin newAdmin = adminService.adminRegister(admin);
+		return new ResponseEntity<>(newAdmin,HttpStatus.OK);
 	}
 
 	@PutMapping("/update")
@@ -33,7 +33,7 @@ public class AdminController {
 	}
 
 	@DeleteMapping("/delete")
-	public void deleteAdmin(@RequestParam Integer adminId) throws Exception {
+	public void deleteAdmin(@RequestParam Integer adminId) {
 		adminService.deleteAdmin(adminId);
 	}
 

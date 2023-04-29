@@ -46,39 +46,42 @@ public class CustomerServiceImpl implements CustomerService {
 	public TripBooking bookTrip(int customerId, String fromLocation, String toLocation, int distanceInKm) throws Exception{
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE). If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
-        List<Driver> drivers=new ArrayList<>();
-		drivers=driverRepository2.findAll();
-		Driver driver=new Driver();
-		int id = Integer.MAX_VALUE;
-		try {
+		List<Driver>driverList=driverRepository2.findAll();
+		Customer customer=customerRepository2.findById(customerId).get();
 
-			for (Driver d : drivers) {
-				if (d.getDriverId() < id && d.getCab().isAvailable()) {
-					driver.setMobileNumber(d.getMobileNumber());
-					driver.setPassword(d.getPassword());
-					driver.setCab(d.getCab());
-					driver.setTripBookingList(d.getTripBookingList());
-					id = d.getDriverId();
-					driver.getCab().setAvailable(false);
+		List<TripBooking> customerTripBookingList1=customer.getTripBookingList();
+		List<TripBooking> driverTripBookingList1=new ArrayList<>();
+
+
+
+        Map<Integer,Driver> driverMap=new TreeMap<>();
+		for (Driver driver1: driverList)
+		{
+			driverMap.put(driver1.getDriverId(),driver1);
+		}
+
+		TripBooking tripBooking = null;
+
+			for (int a:driverMap.keySet())
+			{
+				if (driverMap.get(a).getCab().getAvailable()==true)
+				{
+					tripBooking.setCustomer(customer);
+					tripBooking.setToLocation(toLocation);
+					tripBooking.setFromLocation(fromLocation);
+					tripBooking.setDistanceInKm(distanceInKm);
+					tripBooking.setDriver(driverMap.get(a));
+					driverTripBookingList1=driverMap.get(a).getTripBookingList();
+					driverRepository2.save(driverMap.get(a));
 				}
 			}
-		}catch (Exception e) {
-			if (id == Integer.MAX_VALUE) {
-				throw new Exception("No cab available!");
-			}
-		}
-		Customer customer=new Customer();
-		customer=customerRepository2.findById(customerId).get();
 
-		TripBooking tripBooking=new TripBooking();
-		tripBooking.setTripStatus(TripStatus.CONFIRMED);
-		tripBooking.setDistanceInKm(distanceInKm);
-		tripBooking.setFromLocation(fromLocation);
-		tripBooking.setToLocation(toLocation);
+		if (tripBooking==null)
+		{
+			throw new Exception("No cab available!");
+		}
+		customerRepository2.save(customer);
 		tripBookingRepository2.save(tripBooking);
-		List<TripBooking> list=customer.getTripBookingList();
-		list.add(tripBooking);
-		customer.setTripBookingList(list);
 		return tripBooking;
 	}
 

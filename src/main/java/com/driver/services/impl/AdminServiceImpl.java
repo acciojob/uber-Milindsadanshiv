@@ -27,9 +27,10 @@ public class AdminServiceImpl implements AdminService {
 	CustomerRepository customerRepository1;
 
 	@Override
-	public void adminRegister(Admin admin) {
+	public Admin adminRegister(Admin admin) {
 		//Save the admin in the database
 		adminRepository1.save(admin);
+		return admin;
 	}
 
 	@Override
@@ -45,26 +46,16 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public void deleteAdmin(int adminId) throws Exception {
+	public void deleteAdmin(int adminId) {
 		// Delete admin without using deleteById function
-		Admin admin=new Admin();
-		try{
-			admin=adminRepository1.findById(adminId).get();
-		}
-		catch (Exception e)
-		{
-			throw new Exception("adminId is not valid");
-		}
 		adminRepository1.deleteById(adminId);
-
 	}
 
 	@Override
 	public List<Driver> getListOfDrivers() {
 		//Find the list of all drivers
-    List<Driver>list=new ArrayList<>();
-	list=driverRepository1.findAll();
-	return list;
+      List<Driver> driverList=driverRepository1.findAll();
+	  return driverList;
 	}
 
 	@Override

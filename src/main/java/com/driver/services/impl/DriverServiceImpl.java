@@ -22,7 +22,7 @@ public class DriverServiceImpl implements DriverService {
 	public void register(String mobile, String password){
 		//Save a driver in the database having given details and a cab with ratePerKm as 10 and availability as True by default.
 		Driver driver=new Driver();
-		driver.setMobileNumber(mobile);
+		driver.setMobile(mobile);
 		driver.setPassword(password);
 		driverRepository3.save(driver);
 	}
@@ -38,6 +38,8 @@ public class DriverServiceImpl implements DriverService {
 		//Set the status of respective car to unavailable
          Driver driver=new Driver();
 		 driver=driverRepository3.findById(driverId).get();
+		 driver.getCab().setAvailable(false);
+		 driverRepository3.save(driver);
 
 	}
 }
