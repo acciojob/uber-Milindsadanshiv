@@ -19,7 +19,7 @@ public class TripBooking {
 
     private int distanceInKm;
     @Enumerated(EnumType.STRING)
-    TripStatus tripStatus;
+    TripStatus Status;
     private int bill;
 
     @ManyToOne
