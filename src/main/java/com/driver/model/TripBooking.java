@@ -22,7 +22,7 @@ public class TripBooking {
 
     private int distanceInKm;
 
-    private  TripStatus tripStatus;
+    TripStatus tripStatus;
     private int bill;
 
     @ManyToOne
